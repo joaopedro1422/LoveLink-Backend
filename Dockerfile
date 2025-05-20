@@ -1,14 +1,11 @@
-# Use a imagem oficial do Java 17
-FROM openjdk:17-jdk-slim
-
-# Cria um diretório dentro do container
+FROM maven:3.8.5-openjdk-17 AS build
 WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
 
-# Copia o .jar da pasta target para dentro do container
-COPY target/*.jar app.jar
-
-# Expõe a porta 8080
+FROM eclipse-temurin:17-jdk-alpine
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
-
-# Roda o jar
 ENTRYPOINT ["java", "-jar", "app.jar"]
