@@ -102,12 +102,7 @@ public class Pagina implements Serializable {
         private String url;
         private String descricao;
         private Date data;
-        public Album(){}
-        public Album(String url, String descricao, Date data){
-            this.url = url;
-            this.descricao = descricao;
-            this.data = data;
-        }
+
         public String getUrl() {
             return url;
         }
