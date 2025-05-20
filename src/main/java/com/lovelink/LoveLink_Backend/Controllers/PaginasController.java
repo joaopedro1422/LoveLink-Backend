@@ -38,7 +38,10 @@ public class PaginasController {
             return ResponseEntity.notFound().build();
         }
         Pagina pagina = opPagina.get();
-        Pagina.Album novoAlbum = new Pagina.Album(dados.imagem(), dados.descricao(), dados.data());
+        Pagina.Album novoAlbum = new Pagina.Album();
+        novoAlbum.setData(dados.data());
+        novoAlbum.setDescricao(dados.descricao());
+        novoAlbum.setUrl(dados.imagem());
         pagina.getAlbum().add(novoAlbum);
         return ResponseEntity.ok().body(this.paginaService.salvaPagina(pagina));
 
