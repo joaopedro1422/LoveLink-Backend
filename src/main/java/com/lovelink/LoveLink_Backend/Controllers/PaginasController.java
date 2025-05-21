@@ -12,9 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/paginas",  produces = MediaType.APPLICATION_JSON_VALUE)
@@ -46,6 +48,27 @@ public class PaginasController {
         return ResponseEntity.ok().body(this.paginaService.salvaPagina(pagina));
 
     }
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PutMapping("/{slug}/{id}/update")
+    public ResponseEntity<?> atualizarAlbum(@PathVariable ("slug") String slug,
+                                            @PathVariable ("id") Long id, @RequestBody PaginaRequestDto dados){
+        Optional<Pagina> opPagina = paginaService.getPagina(slug,id);
+       if(opPagina.isEmpty()){
+           return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pagina nao encontrada");
+       }
+        Pagina pagina = opPagina.get();
+        Pagina.Album novoAlbum = new Pagina.Album();
+
+        pagina.setAlbum(dados.album().stream().map(a -> {
+            Pagina.Album alb = new Pagina.Album();
+            alb.setUrl(a.url());
+            alb.setDescricao(a.descricao());
+            alb.setData(a.data());
+            return alb;
+        }).collect(Collectors.toList()));
+        return ResponseEntity.ok().body(this.paginaService.salvaPagina(pagina));
+    }
+
 
 
 

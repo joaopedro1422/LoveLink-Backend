@@ -10,6 +10,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
 import java.text.Normalizer;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -32,7 +33,7 @@ public class Pagina implements Serializable {
     @Column(length = 1000)
     private String mensagem;
     private String autor;
-    private Date data;
+    private LocalDate data;
     private String titulo;
     private String videoId;
     @ElementCollection
@@ -101,7 +102,7 @@ public class Pagina implements Serializable {
     public static class Album {
         private String url;
         private String descricao;
-        private Date data;
+        private LocalDate data;
 
         public String getUrl() {
             return url;
@@ -119,11 +120,11 @@ public class Pagina implements Serializable {
             this.descricao = descricao;
         }
 
-        public Date getData() {
+        public LocalDate getData() {
             return data;
         }
 
-        public void setData(Date data) {
+        public void setData(LocalDate data) {
             this.data = data;
         }
 
@@ -186,11 +187,11 @@ public class Pagina implements Serializable {
         this.autor = autor;
     }
 
-    public Date getData() {
+    public LocalDate getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(LocalDate data) {
         this.data = data;
     }
 

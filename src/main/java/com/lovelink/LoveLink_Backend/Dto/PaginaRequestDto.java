@@ -3,6 +3,7 @@ package com.lovelink.LoveLink_Backend.Dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public record PaginaRequestDto(
         String mensagem,
         String autor,
         String planoSelecionadoForm,
-        Date data,
+        LocalDate data,
         String titulo,
         String videoId,
         List<String> imagens,
@@ -27,6 +28,6 @@ public record PaginaRequestDto(
     public record AlbumDto(
             @NotBlank String url,
             String descricao,
-            @NotNull Date data
+            @NotNull LocalDate data
     ) {}
 }
