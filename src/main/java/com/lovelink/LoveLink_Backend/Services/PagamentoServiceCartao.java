@@ -10,15 +10,21 @@ import com.mercadopago.client.payment.PaymentPayerRequest;
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.payment.Payment;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 @Service
 public class PagamentoServiceCartao {
     @Value("${mercado_pago_sample_access_token}")
     private String mercadoPagoAccessToken;
+    @Autowired
+    private PaginaService paginaService;
+    @Autowired
+    private EmailService emailService;
 
     public PixPaymentResponseDTO processPaymentPix(PixPaymentDTO pagamento){
         try {
@@ -69,22 +75,35 @@ public class PagamentoServiceCartao {
 
             PaymentClient paymentClient = new PaymentClient();
             Payment payment = paymentClient.get(paymentId);
-
+            Optional<Pagina> opPagina = paginaService.getPaginaByPagamentoId(paymentId);
+            if(opPagina.isEmpty()){
+                throw  new NullPointerException();
+            }
+            Pagina paginaEncontrada = opPagina.get();
             System.out.println("📊 Status: " + payment.getStatus());
+            System.out.println("Nome do casal da pagina: " + paginaEncontrada.getNomeCasal());
 
             switch (payment.getStatus()) {
                 case "approved":
-                    // ✅ Criar página no banco de dados
                     System.out.println("✅ Pagamento aprovado. Criar página agora.");
+                    paginaEncontrada.setStatus("aprovado");
+                    paginaService.salvaPagina(paginaEncontrada);
+                    emailService.enviarRegistroPagina(paginaEncontrada);
                     break;
 
                 case "rejected":
-                    // ❌ Apagar entrada temporária do banco
                     System.out.println("❌ Pagamento recusado. Remover dados temporários.");
+                    paginaService.deletaPagina(paginaEncontrada);
+                    emailService.enviarPagamentoRecusado(paginaEncontrada);
                     break;
 
                 case "pending":
                     System.out.println("⌛ Pagamento pendente. Aguardando confirmação.");
+                    break;
+
+                case "inc_process":
+                    System.out.println("⌛ Pagamento pendente. Aguardando confirmação.");
+                    emailService.enviarPagamentoPendente((paginaEncontrada));
                     break;
 
                 default:

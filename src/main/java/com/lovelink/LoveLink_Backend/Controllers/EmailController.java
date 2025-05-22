@@ -1,6 +1,9 @@
 package com.lovelink.LoveLink_Backend.Controllers;
 
+import com.lovelink.LoveLink_Backend.Dto.PaginaRequestDto;
+import com.lovelink.LoveLink_Backend.Models.Pagina;
 import com.lovelink.LoveLink_Backend.Services.EmailService;
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -55,6 +58,12 @@ public class EmailController {
         } else {
             return ResponseEntity.status(400).body("Código inválido");
         }
+    }
+    @PostMapping("/Testa")
+    public ResponseEntity<?> Testa(@RequestBody PaginaRequestDto pagina) {
+        Pagina paginaOp = new Pagina(pagina);
+        emailService.enviarRegistroPagina(paginaOp);
+        return ResponseEntity.ok("email enviado");
     }
 
     private String gerarCodigo() {

@@ -12,5 +12,5 @@ import java.util.UUID;
 public interface PaginaRepository extends JpaRepository<Pagina, Long> {
 
     Optional<Pagina> findByIdAndSlug(Long id, String slug);
-
+    Optional<Pagina> findByPagamentoId(Long id);
 }

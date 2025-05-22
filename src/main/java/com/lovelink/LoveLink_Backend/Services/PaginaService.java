@@ -22,10 +22,19 @@ public class PaginaService {
         Pagina novaPagina = new Pagina(pagina);
         BeanUtils.copyProperties(pagina, novaPagina);
         Pagina paginaRetorno = paginaRepository.save(novaPagina);
-        if(paginaRetorno != null){
-            emailService.enviarRegistroPagina(paginaRetorno);
-        }
+      //  if(paginaRetorno != null){
+     //       emailService.enviarRegistroPagina(paginaRetorno);
+      //  }
         return paginaRetorno;
+    }
+
+    public boolean deletaPagina(Pagina pagina){
+        paginaRepository.delete(pagina);
+        return true;
+    }
+
+    public Optional<Pagina> getPaginaByPagamentoId(Long pagamentoId){
+        return paginaRepository.findByPagamentoId(pagamentoId);
     }
 
     public Pagina salvaPagina(Pagina pagina){

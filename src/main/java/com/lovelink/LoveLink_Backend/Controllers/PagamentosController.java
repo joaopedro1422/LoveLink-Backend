@@ -46,8 +46,6 @@ public class PagamentosController {
             if ("payment".equals(type)) {
                 Map<String, Object> data = (Map<String, Object>) payload.get("data");
                 Long paymentId = Long.valueOf(data.get("id").toString());
-
-
                 pagamentoServiceCartao.processarWebhook(paymentId);
             }
 

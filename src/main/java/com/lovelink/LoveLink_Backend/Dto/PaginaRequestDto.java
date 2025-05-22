@@ -12,7 +12,8 @@ public record PaginaRequestDto(
         String musica,
         String planoSelecionado,
         String email,
-
+        Long pagamentoId,
+        String status,
         String mensagem,
         String autor,
         String planoSelecionadoForm,

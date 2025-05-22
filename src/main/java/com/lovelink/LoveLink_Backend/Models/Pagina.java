@@ -26,6 +26,8 @@ public class Pagina implements Serializable {
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
     private String nomeCasal;
+    private Long pagamentoId;
+    private String status;
     private String slug;
     private String musica;
     private String planoSelecionado;
@@ -60,6 +62,8 @@ public class Pagina implements Serializable {
         this.imagens = dto.imagens();
         this.playlist = dto.playlist();
         this.slug = gerarSlug(dto.nomeCasal());
+        this.status = dto.status();
+        this.pagamentoId = dto.pagamentoId();
 
         // Para o album, converte cada AlbumDto para Album
         if (dto.album() != null) {
@@ -137,6 +141,22 @@ public class Pagina implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getPagamentoId() {
+        return pagamentoId;
+    }
+
+    public void setPagamentoId(Long pagamentoId) {
+        this.pagamentoId = pagamentoId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getNomeCasal() {
