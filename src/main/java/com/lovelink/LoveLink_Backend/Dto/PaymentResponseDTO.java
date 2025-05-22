@@ -4,5 +4,6 @@ public record PaymentResponseDTO(
         Long id,
         String status,
         String statusDetail
+
 ) {
 }

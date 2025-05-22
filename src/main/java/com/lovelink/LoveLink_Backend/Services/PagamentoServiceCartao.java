@@ -1,10 +1,7 @@
 package com.lovelink.LoveLink_Backend.Services;
-import com.lovelink.LoveLink_Backend.Dto.CardPaymentDTO;
-import com.lovelink.LoveLink_Backend.Dto.PaginaResponseDto;
-import com.lovelink.LoveLink_Backend.Dto.PaymentResponseDTO;
+import com.lovelink.LoveLink_Backend.Dto.*;
 import com.lovelink.LoveLink_Backend.Models.Pagina;
 
-import com.lovelink.LoveLink_Backend.Dto.PaginaRequestDto;
 import com.mercadopago.MercadoPagoConfig;
 import com.mercadopago.client.common.IdentificationRequest;
 import com.mercadopago.client.payment.PaymentClient;
@@ -23,6 +20,48 @@ public class PagamentoServiceCartao {
     @Value("${mercado_pago_sample_access_token}")
     private String mercadoPagoAccessToken;
 
+    public PixPaymentResponseDTO processPaymentPix(PixPaymentDTO pagamento){
+        try {
+            MercadoPagoConfig.setAccessToken(mercadoPagoAccessToken);
+            System.out.println("Iniciando pagamento via PIX...");
+            System.out.println("Email do pagador: " + pagamento.payer().email());
+
+            PaymentClient paymentClient = new PaymentClient();
+
+            PaymentCreateRequest paymentCreateRequest =
+                    PaymentCreateRequest.builder()
+                            .transactionAmount(BigDecimal.valueOf(pagamento.transactionAmount()))
+                            .description(pagamento.description())
+                            .paymentMethodId("pix")
+                            .payer(
+                                    PaymentPayerRequest.builder()
+                                            .email(pagamento.payer().email())
+                                            .identification(
+                                                    IdentificationRequest.builder()
+                                                            .type(pagamento.payer().identification().type())
+                                                            .number(pagamento.payer().identification().number())
+                                                            .build())
+                                            .build())
+                            .build();
+
+            Payment createdPayment = paymentClient.create(paymentCreateRequest);
+            System.out.println("Pagamento PIX criado com sucesso! ID: " + createdPayment.getId());
+
+            return new PixPaymentResponseDTO(
+                    createdPayment.getId(),
+                    createdPayment.getStatus(),
+                    createdPayment.getStatusDetail(),
+                    createdPayment.getPointOfInteraction().getTransactionData().getQrCode(),
+                    createdPayment.getPointOfInteraction().getTransactionData().getQrCodeBase64());
+
+        } catch (MPApiException apiException) {
+            System.out.println("Erro da API do Mercado Pago: " + apiException.getApiResponse().getContent());
+            throw new RuntimeException(apiException.getApiResponse().getContent());
+        } catch (MPException exception) {
+            System.out.println("Erro geral do Mercado Pago: " + exception.getMessage());
+            throw new RuntimeException(exception.getMessage());
+        }
+    }
     public PaymentResponseDTO processPayment(CardPaymentDTO pagamento) {
         try {
             MercadoPagoConfig.setAccessToken(mercadoPagoAccessToken);
