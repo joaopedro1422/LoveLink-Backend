@@ -62,6 +62,40 @@ public class PagamentoServiceCartao {
             throw new RuntimeException(exception.getMessage());
         }
     }
+    public void processarWebhook(Long paymentId) {
+        try {
+            System.out.println("🔍 Consultando pagamento ID: " + paymentId);
+            MercadoPagoConfig.setAccessToken(mercadoPagoAccessToken);
+
+            PaymentClient paymentClient = new PaymentClient();
+            Payment payment = paymentClient.get(paymentId);
+
+            System.out.println("📊 Status: " + payment.getStatus());
+
+            switch (payment.getStatus()) {
+                case "approved":
+                    // ✅ Criar página no banco de dados
+                    System.out.println("✅ Pagamento aprovado. Criar página agora.");
+                    break;
+
+                case "rejected":
+                    // ❌ Apagar entrada temporária do banco
+                    System.out.println("❌ Pagamento recusado. Remover dados temporários.");
+                    break;
+
+                case "pending":
+                    System.out.println("⌛ Pagamento pendente. Aguardando confirmação.");
+                    break;
+
+                default:
+                    System.out.println("⚠️ Status não tratado: " + payment.getStatus());
+            }
+
+        } catch (MPException | MPApiException e) {
+            System.err.println("Erro ao processar webhook: " + e.getMessage());
+        }
+    }
+
     public PaymentResponseDTO processPayment(CardPaymentDTO pagamento) {
         try {
             MercadoPagoConfig.setAccessToken(mercadoPagoAccessToken);
