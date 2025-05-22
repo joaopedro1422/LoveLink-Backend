@@ -1,6 +1,7 @@
 package com.lovelink.LoveLink_Backend.Controllers;
 
-import com.lovelink.LoveLink_Backend.Dto.PaymentDtos;
+import com.lovelink.LoveLink_Backend.Dto.CardPaymentDTO;
+import com.lovelink.LoveLink_Backend.Dto.PaymentResponseDTO;
 import com.lovelink.LoveLink_Backend.Services.PagamentoServiceCartao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +17,8 @@ public class PagamentosController {
     @Autowired
     PagamentoServiceCartao pagamentoServiceCartao;
     @PostMapping("/card")
-    public ResponseEntity<PaymentDtos.PaymentResponseDTO> payWithCard(@RequestBody PaymentDtos.CardPaymentDTO cardPaymentDTO) {
-        PaymentDtos.PaymentResponseDTO response = pagamentoServiceCartao.processPayment(cardPaymentDTO);
+    public ResponseEntity<PaymentResponseDTO> payWithCard(@RequestBody CardPaymentDTO cardPaymentDTO) {
+        PaymentResponseDTO response = pagamentoServiceCartao.processPayment(cardPaymentDTO);
         return ResponseEntity.ok(response);
     }
 }
