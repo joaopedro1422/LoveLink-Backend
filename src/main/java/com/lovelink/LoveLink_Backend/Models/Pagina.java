@@ -31,6 +31,7 @@ public class Pagina implements Serializable {
     private String slug;
     private String musica;
     private String planoSelecionado;
+    private LocalDate dataCriacao;
     private String email;
     @Column(length = 1000)
     private String mensagem;
@@ -64,6 +65,7 @@ public class Pagina implements Serializable {
         this.slug = gerarSlug(dto.nomeCasal());
         this.status = dto.status();
         this.pagamentoId = dto.pagamentoId();
+        this.dataCriacao = LocalDate.now();
 
         // Para o album, converte cada AlbumDto para Album
         if (dto.album() != null) {

@@ -123,7 +123,7 @@ public class PagamentoServiceCartao {
                     System.out.println("⌛ Pagamento pendente. Aguardando confirmação.");
                     break;
 
-                case "inc_process":
+                case "in_process":
                     System.out.println("⌛ Pagamento pendente. Aguardando confirmação.");
                     emailService.enviarPagamentoPendente((paginaEncontrada));
                     break;

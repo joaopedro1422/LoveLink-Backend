@@ -8,6 +8,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -42,7 +43,18 @@ public class PaginaService {
     }
 
     public Optional<Pagina> getPagina(String slug, Long id){
-
-        return paginaRepository.findByIdAndSlug(id,slug);
+        Optional<Pagina> opPagina = paginaRepository.findByIdAndSlug(id,slug);
+        if(opPagina.isPresent()){
+            Pagina encontrada = opPagina.get();
+            if(encontrada.getPlanoSelecionado().equalsIgnoreCase("anual")){
+                LocalDate dataExpiracao = encontrada.getDataCriacao().plusYears(1);
+                if (LocalDate.now().isAfter(dataExpiracao) && !"expirado".equalsIgnoreCase(encontrada.getStatus())) {
+                    encontrada.setStatus("expirado");
+                    paginaRepository.save(encontrada);
+                }
+            }
+            return  Optional.of(encontrada);
+        }
+        return  Optional.empty();
     }
 }
