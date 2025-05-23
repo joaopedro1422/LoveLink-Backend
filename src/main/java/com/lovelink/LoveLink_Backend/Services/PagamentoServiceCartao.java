@@ -16,6 +16,9 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Optional;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class PagamentoServiceCartao {
@@ -25,6 +28,13 @@ public class PagamentoServiceCartao {
     private PaginaService paginaService;
     @Autowired
     private EmailService emailService;
+
+    private final ScheduledExecutorService scheduler;
+    public PagamentoServiceCartao(){
+        int nThreads = Runtime.getRuntime().availableProcessors() * 2;
+        this.scheduler = Executors.newScheduledThreadPool(nThreads);
+
+    }
 
     public PixPaymentResponseDTO processPaymentPix(PixPaymentDTO pagamento){
         try {
@@ -68,7 +78,11 @@ public class PagamentoServiceCartao {
             throw new RuntimeException(exception.getMessage());
         }
     }
-    public void processarWebhook(Long paymentId) {
+
+    public void processarWebhook(Long paymentId, int tentativaAtual) {
+        final int MAX_TENTATIVAS = 5;
+        final int DELAY_SEGUNDOS = 5;
+
         try {
             System.out.println("🔍 Consultando pagamento ID: " + paymentId);
             MercadoPagoConfig.setAccessToken(mercadoPagoAccessToken);
@@ -77,7 +91,15 @@ public class PagamentoServiceCartao {
             Payment payment = paymentClient.get(paymentId);
             Optional<Pagina> opPagina = paginaService.getPaginaByPagamentoId(paymentId);
             if(opPagina.isEmpty()){
-                throw  new NullPointerException();
+                if(tentativaAtual < MAX_TENTATIVAS){
+                    System.out.println("⏳ Página ainda não encontrada. Tentando novamente em " + DELAY_SEGUNDOS + "s...");
+                    scheduler.schedule(() -> processarWebhook(paymentId, tentativaAtual + 1),
+                            DELAY_SEGUNDOS, TimeUnit.SECONDS);
+                }
+                else {
+                    System.out.println("🚫 Página não encontrada após " + MAX_TENTATIVAS + " tentativas. Abortando.");
+                }
+                return;
             }
             Pagina paginaEncontrada = opPagina.get();
             System.out.println("📊 Status: " + payment.getStatus());
