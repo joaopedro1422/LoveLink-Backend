@@ -25,6 +25,7 @@ public class Pagina implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
+    private UUID idParceiro;
     private String nomeCasal;
     private Long pagamentoId;
     private String status;
@@ -53,6 +54,7 @@ public class Pagina implements Serializable {
     public Pagina(PaginaRequestDto dto) {
         this.nomeCasal = dto.nomeCasal();
         this.musica = dto.musica();
+        this.idParceiro = dto.idParceiro();
         this.planoSelecionado = dto.planoSelecionado();
         this.email = dto.email();
         this.mensagem = dto.mensagem();
@@ -136,6 +138,21 @@ public class Pagina implements Serializable {
 
     }
 
+    public UUID getIdParceiro() {
+        return idParceiro;
+    }
+
+    public void setIdParceiro(UUID idParceiro) {
+        this.idParceiro = idParceiro;
+    }
+
+    public LocalDate getDataCriacao() {
+        return dataCriacao;
+    }
+
+    public void setDataCriacao(LocalDate dataCriacao) {
+        this.dataCriacao = dataCriacao;
+    }
 
     public Long getId() {
         return id;

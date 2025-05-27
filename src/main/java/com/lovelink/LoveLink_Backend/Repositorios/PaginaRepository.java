@@ -13,4 +13,6 @@ public interface PaginaRepository extends JpaRepository<Pagina, Long> {
 
     Optional<Pagina> findByIdAndSlug(Long id, String slug);
     Optional<Pagina> findByPagamentoId(Long id);
+
+    List<Pagina> findAllByIdParceiro(UUID id);
 }

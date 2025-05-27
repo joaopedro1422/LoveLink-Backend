@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -36,6 +37,10 @@ public class PaginaService {
 
     public Optional<Pagina> getPaginaByPagamentoId(Long pagamentoId){
         return paginaRepository.findByPagamentoId(pagamentoId);
+    }
+
+    public List<Pagina> getPaginasPorParceiro(UUID idParceiro){
+        return paginaRepository.findAllByIdParceiro(idParceiro);
     }
 
     public Pagina salvaPagina(Pagina pagina){

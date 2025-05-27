@@ -50,7 +50,7 @@ public class PaginasController {
     }
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PutMapping("/{slug}/{id}/update")
-    public ResponseEntity<?> atualizarAlbum(@PathVariable ("slug") String slug,
+    public ResponseEntity<?> atualizarPagina(@PathVariable ("slug") String slug,
                                             @PathVariable ("id") Long id, @RequestBody PaginaRequestDto dados){
         Optional<Pagina> opPagina = paginaService.getPagina(slug,id);
        if(opPagina.isEmpty()){
@@ -66,10 +66,17 @@ public class PaginasController {
             alb.setData(a.data());
             return alb;
         }).collect(Collectors.toList()));
+        pagina.setMensagem(dados.mensagem());
+        pagina.setData(dados.data());
+        pagina.setTitulo(dados.titulo());
         return ResponseEntity.ok().body(this.paginaService.salvaPagina(pagina));
     }
 
-
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @GetMapping("/{id}/paginasParceiro")
+    public ResponseEntity<?> getPaginasPorParceiro(@PathVariable("id") UUID id){
+        return ResponseEntity.ok(paginaService.getPaginasPorParceiro(id));
+    }
 
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")

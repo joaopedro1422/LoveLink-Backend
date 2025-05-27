@@ -6,9 +6,11 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public record PaginaRequestDto(
         @NotBlank String nomeCasal,
+        UUID idParceiro,
         String musica,
         String planoSelecionado,
         String email,
