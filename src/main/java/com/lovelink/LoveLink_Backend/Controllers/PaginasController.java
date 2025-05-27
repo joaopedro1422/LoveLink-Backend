@@ -67,6 +67,9 @@ public class PaginasController {
             return alb;
         }).collect(Collectors.toList()));
         pagina.setMensagem(dados.mensagem());
+        pagina.setVideoId(dados.videoId());
+        pagina.setNomeCasal(dados.nomeCasal());
+        pagina.setAutor(dados.autor());
         pagina.setData(dados.data());
         pagina.setTitulo(dados.titulo());
         return ResponseEntity.ok().body(this.paginaService.salvaPagina(pagina));
@@ -76,6 +79,19 @@ public class PaginasController {
     @GetMapping("/{id}/paginasParceiro")
     public ResponseEntity<?> getPaginasPorParceiro(@PathVariable("id") UUID id){
         return ResponseEntity.ok(paginaService.getPaginasPorParceiro(id));
+    }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @DeleteMapping("/deleta/{slug}/{id}")
+    public ResponseEntity<?> deletaPagina(@PathVariable("slug") String slug,
+                                          @PathVariable("id") Long id){
+        Optional<Pagina> paginaEncontrada = paginaService.getPagina(slug,id);
+        if(paginaEncontrada.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pagina não encontrada");
+        }
+        Pagina pagina = paginaEncontrada.get();
+        paginaService.deletaPagina(pagina);
+        return ResponseEntity.status(HttpStatus.OK).body("Pagina deletada com sucesso");
     }
 
 
