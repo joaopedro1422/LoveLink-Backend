@@ -317,6 +317,9 @@ public class EmailService {
                   </body>
                 </html>
                 """.formatted(nome, email, mensagemEnviada );
+            helper.setText(conteudoHtml, true); // true = HTML
+
+            mailSender.send(mensagem);
         }catch (Exception ex){
             throw new RuntimeException("Erro ao enviar e-mail", ex);
         }
