@@ -298,6 +298,29 @@ public class EmailService {
             throw new RuntimeException("Erro ao enviar e-mail", e);
         }
     }
+
+    public void enviaMensagemSuporte(String email,String nome, String mensagemEnviada){
+        try{
+            MimeMessage mensagem = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mensagem, true, "UTF-8");
+            helper.setTo("lovelinksuport@gmail.com");
+            helper.setSubject("Nova mensagem de duvidas");
+            String conteudoHtml = """
+                <!DOCTYPE html>
+                <html>
+                  <body style="font-family: Arial, sans-serif; color: #333;">
+                    <p>Nova mensagem de %s,</p>       
+                    <p>Email: %s</p>
+                    <p>%s </p>
+                  
+                
+                  </body>
+                </html>
+                """.formatted(nome, email, mensagemEnviada );
+        }catch (Exception ex){
+            throw new RuntimeException("Erro ao enviar e-mail", ex);
+        }
+    }
     public void enviarRegistroPagina(Pagina pagina){
         try {
             String primeiroNome = getPrimeiroNomeAutor(pagina);

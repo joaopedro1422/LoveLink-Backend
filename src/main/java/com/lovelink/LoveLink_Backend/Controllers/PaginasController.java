@@ -68,6 +68,7 @@ public class PaginasController {
         }).collect(Collectors.toList()));
         pagina.setMensagem(dados.mensagem());
         pagina.setVideoId(dados.videoId());
+        pagina.setImagens(dados.imagens());
         pagina.setNomeCasal(dados.nomeCasal());
         pagina.setAutor(dados.autor());
         pagina.setData(dados.data());

@@ -1,5 +1,6 @@
 package com.lovelink.LoveLink_Backend.Controllers;
 
+import com.lovelink.LoveLink_Backend.Dto.MensagemSuporteDTO;
 import com.lovelink.LoveLink_Backend.Dto.PaginaRequestDto;
 import com.lovelink.LoveLink_Backend.Models.Pagina;
 import com.lovelink.LoveLink_Backend.Services.EmailService;
@@ -58,6 +59,11 @@ public class EmailController {
         } else {
             return ResponseEntity.status(400).body("Código inválido");
         }
+    }
+    @PostMapping("/enviaMensagemSuporte")
+    public ResponseEntity<?> enviaMensagemSuporte(@RequestBody MensagemSuporteDTO mensagemSuporteDTO){
+        emailService.enviaMensagemSuporte(mensagemSuporteDTO.email(), mensagemSuporteDTO.nome(), mensagemSuporteDTO.mensagem());
+        return ResponseEntity.ok("Email enviado com sucesso");
     }
     @PostMapping("/Testa")
     public ResponseEntity<?> Testa(@RequestBody PaginaRequestDto pagina) {
