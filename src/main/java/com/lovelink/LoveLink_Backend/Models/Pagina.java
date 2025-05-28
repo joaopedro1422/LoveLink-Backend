@@ -29,7 +29,7 @@ public class Pagina implements Serializable {
     private String nomeCasal;
     private Long pagamentoId;
     private String status;
-    private double valor;
+    private Double valor;
     private String slug;
     private String musica;
     private String planoSelecionado;
@@ -140,7 +140,7 @@ public class Pagina implements Serializable {
 
     }
 
-    public double getValor() {
+    public Double getValor() {
         return valor;
     }
 
