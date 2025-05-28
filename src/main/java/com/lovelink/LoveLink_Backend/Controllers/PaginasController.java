@@ -77,7 +77,7 @@ public class PaginasController {
     }
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    @GetMapping
+    @GetMapping("/getAll")
     public ResponseEntity<?> getAllPaginas(){
         return ResponseEntity.ok(paginaService.getAll());
     }
