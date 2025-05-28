@@ -29,6 +29,7 @@ public class Pagina implements Serializable {
     private String nomeCasal;
     private Long pagamentoId;
     private String status;
+    private double valor;
     private String slug;
     private String musica;
     private String planoSelecionado;
@@ -68,6 +69,7 @@ public class Pagina implements Serializable {
         this.status = dto.status();
         this.pagamentoId = dto.pagamentoId();
         this.dataCriacao = LocalDate.now();
+        this.valor = dto.valor();
 
         // Para o album, converte cada AlbumDto para Album
         if (dto.album() != null) {
@@ -136,6 +138,14 @@ public class Pagina implements Serializable {
             this.data = data;
         }
 
+    }
+
+    public double getValor() {
+        return valor;
+    }
+
+    public void setValor(double valor) {
+        this.valor = valor;
     }
 
     public UUID getIdParceiro() {

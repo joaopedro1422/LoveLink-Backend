@@ -12,6 +12,7 @@ public record PaginaRequestDto(
         @NotBlank String nomeCasal,
         UUID idParceiro,
         String musica,
+        Double valor,
         String planoSelecionado,
         String email,
         Long pagamentoId,
