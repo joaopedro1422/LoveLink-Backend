@@ -77,6 +77,12 @@ public class PaginasController {
     }
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @GetMapping
+    public ResponseEntity<?> getAllPaginas(){
+        return ResponseEntity.ok(paginaService.getAll());
+    }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/{id}/paginasParceiro")
     public ResponseEntity<?> getPaginasPorParceiro(@PathVariable("id") UUID id){
         return ResponseEntity.ok(paginaService.getPaginasPorParceiro(id));

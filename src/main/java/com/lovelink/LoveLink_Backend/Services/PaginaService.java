@@ -39,6 +39,10 @@ public class PaginaService {
         return paginaRepository.findByPagamentoId(pagamentoId);
     }
 
+    public List<Pagina> getAll(){
+        return paginaRepository.findAll();
+    }
+
 
 
     public List<Pagina> getPaginasPorParceiro(UUID idParceiro){
