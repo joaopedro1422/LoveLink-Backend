@@ -23,7 +23,7 @@ public class ParceiroService {
         Parceiro novoParceiro = new Parceiro(parceiroRequestDTO);
         novoParceiro.setSenha(passwordEncoder.encode(parceiroRequestDTO.senha()));
         parceirosRepository.save(novoParceiro);
-        return new ParceiroResponseDTO(novoParceiro.getNome(), novoParceiro.getEmail(),novoParceiro.getPrecoCompra(), novoParceiro.getId());
+        return new ParceiroResponseDTO(novoParceiro.getNome(), novoParceiro.getEmail(), novoParceiro.getImagem(), novoParceiro.getPrecoCompra(), novoParceiro.getId());
     }
     public Parceiro salvaParceiro(Parceiro parceiro){
         return parceirosRepository.save(parceiro);

@@ -42,7 +42,7 @@ public class ParceirosController {
             if(!passwordEncoder.matches(loginDTO.senha(), parceiro.getSenha())){
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email ou senha incorretos");
             }
-            return ResponseEntity.ok(new ParceiroResponseDTO(parceiro.getNome(), parceiro.getEmail(), parceiro.getPrecoCompra(), parceiro.getId()));
+            return ResponseEntity.ok(new ParceiroResponseDTO(parceiro.getNome(), parceiro.getEmail(), parceiro.getImagem(), parceiro.getPrecoCompra(), parceiro.getId()));
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Erro ao processar login: " + e.getMessage());
@@ -58,8 +58,25 @@ public class ParceirosController {
         }
         Parceiro parceiro = parceiroEncontrado.get();
         parceiro.setSenha(passwordEncoder.encode(newSenhaDTO.novaSenha()));
-        return ResponseEntity.status(HttpStatus.OK).body(new ParceiroResponseDTO(parceiro.getNome(), parceiro.getEmail(), parceiro.getPrecoCompra(), parceiro.getId()));
+        parceiroService.salvaParceiro(parceiro);
+        return ResponseEntity.status(HttpStatus.OK).body(new ParceiroResponseDTO(parceiro.getNome(), parceiro.getEmail(), parceiro.getImagem(), parceiro.getPrecoCompra(), parceiro.getId()));
     }
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PutMapping("/{id}/update")
+    public ResponseEntity<?> updateParceiro(@PathVariable("id")UUID id, @RequestBody ParceiroRequestDTO novoParceiro){
+        Optional<Parceiro> parceiroEncontrado = parceiroService.getParceiro(id);
+        if(parceiroEncontrado.isEmpty())
+        {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("parceiro não encontrado");
+        }
+        Parceiro parceiro = parceiroEncontrado.get();
+        parceiro.setImagem(novoParceiro.imagem());
+        parceiro.setEmail(novoParceiro.email());
+        parceiro.setNome(novoParceiro.nome());
+        parceiroService.salvaParceiro(parceiro);
+        return ResponseEntity.status(HttpStatus.OK).body(new ParceiroResponseDTO(parceiro.getNome(), parceiro.getEmail(), parceiro.getImagem(), parceiro.getPrecoCompra(), parceiro.getId()));
+    }
+
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PutMapping("/{id}/alteraValor")
     public ResponseEntity<?> alteraValorParceiro(@PathVariable("id")UUID id, @RequestBody NewValorParceiro newValorParceiro){
@@ -71,7 +88,7 @@ public class ParceirosController {
         Parceiro parceiro = parceiroEncontrado.get();
         parceiro.setPrecoCompra(newValorParceiro.novoValor());
         parceiroService.salvaParceiro(parceiro);
-        return ResponseEntity.status(HttpStatus.OK).body(new ParceiroResponseDTO(parceiro.getNome(), parceiro.getEmail(), parceiro.getPrecoCompra(), parceiro.getId()));
+        return ResponseEntity.status(HttpStatus.OK).body(new ParceiroResponseDTO(parceiro.getNome(), parceiro.getEmail(),parceiro.getImagem(), parceiro.getPrecoCompra(), parceiro.getId()));
     }
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -83,7 +100,7 @@ public class ParceirosController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("parceiro não encontrado");
         }
         Parceiro parceiro = parceiroEncontrado.get();
-        return ResponseEntity.status(HttpStatus.OK).body(new ParceiroResponseDTO(parceiro.getNome(), parceiro.getEmail(), parceiro.getPrecoCompra(), parceiro.getId()));
+        return ResponseEntity.status(HttpStatus.OK).body(new ParceiroResponseDTO(parceiro.getNome(), parceiro.getEmail(), parceiro.getImagem(), parceiro.getPrecoCompra(), parceiro.getId()));
     }
 
 }

@@ -21,6 +21,7 @@ public class Parceiro implements Serializable {
     private UUID id;
     private String nome;
     private String email;
+    private String imagem;
     private String senha;
     private Double precoCompra;
 
@@ -29,9 +30,18 @@ public class Parceiro implements Serializable {
         this.email = parceiroRequestDTO.email();;
         this.senha = parceiroRequestDTO.senha();
         this.precoCompra = parceiroRequestDTO.precoCompra();
+        this.imagem = parceiroRequestDTO.imagem();
     }
 
     public Parceiro() {}
+
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
+    }
 
     public UUID getId() {
         return id;
