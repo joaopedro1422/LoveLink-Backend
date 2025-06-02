@@ -333,7 +333,7 @@ public class EmailService {
 
             helper.setTo(pagina.getEmail());
             helper.setSubject("Parabéns! você acabou de adquirir um presente mais do que especial !");
-            String url = "https://lovelink-frontenddeploy.vercel.app/"+pagina.getSlug()+"/" + pagina.getId();
+            String url = "https://www.lovelinkbr.com.br/"+pagina.getSlug()+"/" + pagina.getId();
             String conteudoHtml = """
                     <!DOCTYPE html>
                     <html>
@@ -436,10 +436,10 @@ public class EmailService {
                                  <p>Aqui estão o link de acesso e o QR Code em anexo para a sua nova página personalizada ❤️</p>
                            
                                  <div class="codigo">
-                                   <p>https://lovelink-frontenddeploy.vercel.app/%s/%s</p>
+                                   <p>https://www.lovelinkbr.com.br/%s/%s</p>
                                  </div>
                            
-                                 <a href="https://lovelink-frontenddeploy.vercel.app/qrCode/%s/%s" class="btn" target="_blank" rel="noopener noreferrer">Gerar QR Code</a>
+                                 <a href="https://www.lovelinkbr.com.br/qrCode/%s/%s" class="btn" target="_blank" rel="noopener noreferrer">Gerar QR Code</a>
                            
                                  <div class="summary">
                                    <h3>Resumo da Compra</h3>
