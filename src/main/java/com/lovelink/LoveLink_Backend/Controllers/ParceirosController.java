@@ -34,7 +34,7 @@ public class ParceirosController {
     @PostMapping("/loginParceiro")
     public ResponseEntity<?> logaParceiro(@RequestBody @Valid LoginDTO loginDTO){
         try{
-            Optional<Parceiro> parceiroEncontrado = parceiroService.getParceiroByEmail(loginDTO.email());
+            Optional<Parceiro> parceiroEncontrado = parceiroService.getParceiroByEmail(loginDTO.email().toLowerCase());
             if(parceiroEncontrado.isEmpty()){
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email ou senha incorretos1");
             }
